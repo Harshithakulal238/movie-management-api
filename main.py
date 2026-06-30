@@ -20,4 +20,9 @@ def home():
 def get_movies():
     return  movies
 
-
+@app.get("/movies/{id}")
+def get_movie(id: int):
+    for m in movies:
+        if m["id"]==id:
+            return m
+    return {"message":"Movie not found"}
