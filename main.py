@@ -64,3 +64,12 @@ def update_movie(id:int,updated_movie:Movie):
             movies[i]=movie_data
             return movie_data
     return {"message":"Movie not found"}
+
+@app.patch("/movies/{id}")
+def patch_movie(id: int, updated_movie: MovieUpdate):
+    for movie in movies:
+        if movie["id"] == id:
+            update_data = updated_movie.model_dump(exclude_unset=True)
+            movie.update(update_data)
+            return movie
+    return {"message": "Movie not found"}
