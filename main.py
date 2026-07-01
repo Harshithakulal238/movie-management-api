@@ -1,4 +1,8 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
+from typing import Optional
+
+
 app=FastAPI()
 movies=[{
     "id":1,
@@ -12,17 +16,28 @@ movies=[{
         "genre":"Action",
         "rating":9.0
     }]
+class Movie(BaseModel):
+    title:str
+    genre:str
+    rating:float
+
+class MovieUpdate(BaseModel):
+    title:Optional[str]=None
+    genre:Optional[str]=None
+    rating:Optional[float]=None
+
 @app.get("/")
 def home():
     return {"message": "Welcome to the Movie Management API!"}
 
 @app.get("/movies")
-def get_movies():
+def get_movies(genre:str=None):
+    if genre:
+        filtered_movies=[]
+        for m in movies:
+            if m["genre"].lower()==genre.lower():
+                filtered_movies.append(m)
+        return filtered_movies
     return  movies
 
-@app.get("/movies/{id}")
-def get_movie(id: int):
-    for m in movies:
-        if m["id"]==id:
-            return m
-    return {"message":"Movie not found"}
+
