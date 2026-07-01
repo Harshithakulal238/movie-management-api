@@ -30,6 +30,14 @@ class MovieUpdate(BaseModel):
 def home():
     return {"message": "Welcome to the Movie Management API!"}
 
+
+@app.get("/movies/{id}")
+def get_movie(id:int):
+    for m in movies:
+        if m["id"]==id:
+            return m
+    return {"error":"Movie not found"}
+
 @app.get("/movies")
 def get_movies(genre:str=None):
     if genre:
@@ -39,5 +47,12 @@ def get_movies(genre:str=None):
                 filtered_movies.append(m)
         return filtered_movies
     return  movies
+
+@app.post("/movies")
+def create_movie(movie:Movie):
+    movie_dict=movie.model_dump()
+    movie_dict["id"]=len(movies)+1
+    movies.append(movie_dict)
+    return movie_dict
 
 
