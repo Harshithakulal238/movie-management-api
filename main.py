@@ -73,3 +73,15 @@ def patch_movie(id: int, updated_movie: MovieUpdate):
             movie.update(update_data)
             return movie
     return {"message": "Movie not found"}
+
+@app.delete("/movies/{id}")
+def delete_movie(id: int):
+    for i, movie in enumerate(movies):
+        if movie["id"] == id:
+            deleted_movie = movies.pop(i)
+            return {
+                "message": "Movie deleted successfully",
+                "movie": deleted_movie
+            }
+
+    return {"message": "Movie not found"}
