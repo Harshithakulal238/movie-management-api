@@ -55,4 +55,12 @@ def create_movie(movie:Movie):
     movies.append(movie_dict)
     return movie_dict
 
-
+@app.put("/movies/{id}")
+def update_movie(id:int,updated_movie:Movie):
+    for i,m in enumerate(movies):
+        if m["id"]==id:
+            movie_data=updated_movie.model_dump()
+            movie_data["id"]=id
+            movies[i]=movie_data
+            return movie_data
+    return {"message":"Movie not found"}
